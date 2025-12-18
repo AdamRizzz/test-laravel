@@ -15,12 +15,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        // 1. User ADMIN (Untuk masuk Dashboard)
         User::factory()->create([
             'name' => 'Admin Diskominfotik',
-            'email' => 'egar@gmail.com',       // <-- Ganti email sesuka hati
+            'email' => 'egar@gmail.com',
+            'role' => 'admin',              // <--- Penting: Set sebagai admin
             'password' => bcrypt('rahasia123'),
+        ]);
+
+        // 2. User BIASA (Untuk masuk halaman Identitas)
+        User::factory()->create([
+            'name' => 'Staf Pegawai',
+            'email' => 'user@gmail.com',    // <--- Email user kedua
+            'role' => 'user',               // <--- Penting: Set sebagai user biasa
+            'password' => bcrypt('user123'),
         ]);
     }
 }

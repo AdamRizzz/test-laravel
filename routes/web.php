@@ -1,40 +1,51 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\IdentitasController;
-use App\Http\Controllers\AdminController;
-use Illuminate\Support\Facades\Route;
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-/*
-|--------------------------------------------------------------------------
-| ROUTES UNTUK LOGIN & LOGOUT
-|--------------------------------------------------------------------------
-*/
+class AuthController extends Controller
+{
+    // Tampilkan form login
+    public function showLogin()
+    {
+        return view('login');
+    }
 
-// Halaman login utama (default)
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+    // Proses login
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
 
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            $user = Auth::user();
 
-/*
-|--------------------------------------------------------------------------
-| ROUTES UNTUK HALAMAN USER BIASA (FORM IDENTITAS)
-|--------------------------------------------------------------------------
-*/
-Route::get('/identitas', [IdentitasController::class, 'index'])->name('home')->middleware('auth');
-Route::post('/identitas/simpan', [IdentitasController::class, 'store'])->name('simpan')->middleware('auth');
+            // --- LOGIKA TERBALIK SESUAI PERMINTAAN ---
+            
+            if ($user->role === 'admin') {
+                // Jika Admin -> Masuk ke IDENTITAS ('home')
+                return redirect()->route('home'); 
+            } else {
+                // Jika User Biasa -> Masuk ke DASHBOARD ('admin.dashboard')
+                return redirect()->route('admin.dashboard');
+            }
+        }
 
+        return back()->withErrors(['email' => 'Email atau password salah!']);
+    }
 
-/*
-|--------------------------------------------------------------------------
-| ROUTES UNTUK ADMIN DASHBOARD
-|--------------------------------------------------------------------------
-*/
-Route::get('/admin/dashboard', [AdminController::class, 'index'])
-    ->name('admin.dashboard')
-    ->middleware('auth');
+    // Logout
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
+    }
+}
