@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use App\Http\Middleware\CekRole; // <--- WAJIB ADA
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,7 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //
         $middleware->trustProxies(at: '*'); 
         $middleware->alias([
-            'role' => CekRole::class,
+            'role' => \App\Http\Middleware\CekRole::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
