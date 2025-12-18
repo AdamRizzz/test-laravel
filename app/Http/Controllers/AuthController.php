@@ -28,13 +28,11 @@ class AuthController extends Controller
             // --- LOGIKA PENGALIHAN (REDIRECT) ---
             
             if ($user->role === 'admin') {
-                // ADMIN masuk ke halaman IDENTITAS
-                // (Pastikan route '/identitas' bernama 'home' di web.php)
+                // Admin ke Identitas
                 return redirect()->route('home'); 
             } else {
-                // USER BIASA masuk ke halaman DASHBOARD
-                // (Pastikan route '/admin/dashboard' bernama 'admin.dashboard' di web.php)
-                return redirect()->route('admin.dashboard');
+                // User ke Dashboard (Sesuai nama baru di web.php)
+                return redirect()->route('dashboard'); 
             }
         }
 
