@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;     // <--- Panggil Controller tadi
+use App\Http\Controllers\IdentitasController;
+use App\Http\Controllers\AdminController;
 
 class AuthController extends Controller
 {

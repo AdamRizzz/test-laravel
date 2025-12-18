@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Schema; // Tambahkan ini untuk cek kolom
 
 class AuthController extends Controller
 {
@@ -23,18 +22,14 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-            // 1. REGENERASI SESI (Wajib untuk keamanan & menghindari error 419)
             $request->session()->regenerate();
-
             $user = Auth::user();
 
-            // 2. CEK ROLE DENGAN AMAN
-            // Logika: Jika kolom role ada DAN isinya admin, ke dashboard.
-            // Jika tidak, semuanya ke 'home' (/identitas).
-            if (isset($user->role) && $user->role === 'admin') {
-                return redirect()->route('admin.dashboard');
+            // --- LOGIKA TERBALIK (Sesuai kode Anda) ---
+            if ($user->role === 'admin') {
+                return redirect()->route('home'); // Admin ke Identitas
             } else {
-                return redirect()->route('home'); // Ini mengarah ke /identitas
+                return redirect()->route('admin.dashboard'); // User ke Dashboard
             }
         }
 
