@@ -12,11 +12,12 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
-        //
-        $middleware->trustProxies(at: '*'); 
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->trustProxies(at: '*');
+
         $middleware->alias([
-            'role' => \App\Http\Middleware\CekRole::class,
+            // Pakai alamat lengkap (Namespace) agar Laravel langsung menemukannya
+            'role' => \App\Http\Middleware\CekRole::class, 
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
