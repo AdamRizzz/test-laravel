@@ -25,11 +25,16 @@ class AuthController extends Controller
             $request->session()->regenerate();
             $user = Auth::user();
 
-            // --- LOGIKA TERBALIK (Sesuai kode Anda) ---
+            // --- LOGIKA PENGALIHAN (REDIRECT) ---
+            
             if ($user->role === 'admin') {
-                return redirect()->route('home'); // Admin ke Identitas
+                // ADMIN masuk ke halaman IDENTITAS
+                // (Pastikan route '/identitas' bernama 'home' di web.php)
+                return redirect()->route('home'); 
             } else {
-                return redirect()->route('admin.dashboard'); // User ke Dashboard
+                // USER BIASA masuk ke halaman DASHBOARD
+                // (Pastikan route '/admin/dashboard' bernama 'admin.dashboard' di web.php)
+                return redirect()->route('admin.dashboard');
             }
         }
 
