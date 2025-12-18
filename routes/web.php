@@ -1,53 +1,28 @@
 <?php
 
-namespace App\Http\Controllers;
-
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;     // <--- Panggil Controller tadi
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IdentitasController;
 use App\Http\Controllers\AdminController;
 
-class AuthController extends Controller
-{
-    // Tampilkan form login
-    public function showLogin()
-    {
-        return view('login');
-    }
+// 1. Redirect halaman awal ke login
+Route::get('/', function () {
+    return redirect()->route('login');
+});
 
-    // Proses login
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
+// 2. Route untuk Login & Logout
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            $user = Auth::user();
+// 3. Route Tujuan (Pastikan URL ini sesuai dengan error 404 yang Anda lihat)
 
-            // --- LOGIKA TERBALIK SESUAI PERMINTAAN ---
-            
-            if ($user->role === 'admin') {
-                // Jika Admin -> Masuk ke IDENTITAS ('home')
-                return redirect()->route('home'); 
-            } else {
-                // Jika User Biasa -> Masuk ke DASHBOARD ('admin.dashboard')
-                return redirect()->route('admin.dashboard');
-            }
-        }
+// Kalau 404-nya di: /identitas
+Route::get('/identitas', [IdentitasController::class, 'index'])
+    ->name('home')
+    ->middleware('auth');
 
-        return back()->withErrors(['email' => 'Email atau password salah!']);
-    }
-
-    // Logout
-    public function logout(Request $request)
-    {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect()->route('login');
-    }
-}
+// Kalau 404-nya di: /admin/dashboard
+Route::get('/admin/dashboard', [AdminController::class, 'index'])
+    ->name('admin.dashboard')
+    ->middleware('auth');
