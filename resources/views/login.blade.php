@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Login Sistem Diskominfotik NTB</title>
-    <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <style>
         body {
             background: linear-gradient(135deg, #007bff, #6610f2);
@@ -85,6 +85,7 @@
 
     <div class="login-card">
         <img src="{{ asset('images/Gambar Diskominfotik.jpg') }}" alt="Logo" class="logo">
+        
         <h2>Login</h2>
         <p class="subtitle">Silakan login untuk melanjutkan</p>
 
@@ -111,6 +112,8 @@
     <div class="footer-text">
         © 2025 Diskominfotik NTB. All rights reserved.
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
