@@ -43,3 +43,29 @@ Route::post('/identitas/simpan', [IdentitasController::class, 'store'])
 Route::get('/admin/dashboard', [AdminController::class, 'index'])
     ->name('admin.dashboard')
     ->middleware('auth');
+
+    // ... kode route login tetap sama ...
+
+/*
+|--------------------------------------------------------------------------
+| HALAMAN IDENTITAS (KHUSUS ADMIN)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    
+    Route::get('/identitas', [IdentitasController::class, 'index'])->name('home');
+    Route::post('/identitas/simpan', [IdentitasController::class, 'store'])->name('simpan');
+
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| HALAMAN DASHBOARD (KHUSUS USER BIASA)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:user'])->group(function () {
+    
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+
+});
